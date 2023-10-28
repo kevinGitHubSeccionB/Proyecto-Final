@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cálculo de Envío</title>
+    
+</head>
+<body>
+    <link rel="stylesheet" type="text/css" href="estilos.css">
+    <script src="script.js"></script>
+
+    <div class="navbar">
+        <h1>Cálculo de Envío</h1>
+    </div>
+
+    <div class="container">
+        <div class="menu">
+        
+
+        <form id="envioForm">
+            <label for="tipo_mercancia">Tipo de Mercancía:</label>
+            <select id="tipo_mercancia">
+                <option value="documentos">Documentos</option>
+                <option value="paqueteria">Paquetería</option>
+                <option value="mobiliario">Mobiliario</option>
+                <option value="repuestos">Repuestos</option>
+                <option value="art_electronicos">Art. Electrónicos</option>
+            </select>
+<br></br>
+            <label for="ubicacion">Ubicación:</label>
+            <select id="ubicacion">
+                <option value="Guatemala 10">Guatemala 10 km</option>
+                <option value="Izabal 300">Izabal 300 km</option>
+                <option value="Peten 460">Peten 460 km</option>
+                <option value="Chiquimula 178">Chiquimula 178 km</option>
+                <option value="Retalhuleu 200">Retalhuleu 200 km</option>
+            </select>
+<br></br>
+            <label for="largo">Largo (cm):</label>
+            <input type="number" id="largo">
+<br></br>
+            <label for="ancho">Ancho (cm):</label>
+            <input type="number" id="ancho">
+<br></br>
+            <label for="alto">Alto (cm):</label>
+            <input type="number" id="alto">
+<br></br>
+            <button type="button" class="calcular-button" onclick="calcularEnvio()">Calcular</button>
+   
+        </form>
+
+        <div id="resultado"></div>
+    </div>
+
+
+    
+</div>
+
+
+
+
+    <script>
+        // Función para calcular el costo de envío
+        function calcularEnvio() {
+            var tipoMercancia = document.getElementById("tipo_mercancia").value;
+            var ubicacion = document.getElementById("ubicacion").value;
+            var largo = parseFloat(document.getElementById("largo").value);
+            var ancho = parseFloat(document.getElementById("ancho").value);
+            var alto = parseFloat(document.getElementById("alto").value);
+            var resultado = document.getElementById("resultado");
+
+            var costo = 0;
+
+            // Extraer la distancia (número) desde la opción seleccionada
+            var distanciaMatch = ubicacion.match(/\d+/); // Expresión regular para extraer dígitos
+            if (distanciaMatch) {
+                var distancia = parseInt(distanciaMatch[0]);
+            } else {
+                var distancia = 0;
+            }
+
+            var pesoReal = 0;
+
+            // Calcular el peso volumétrico
+            var pesoVolumetrico = (largo * ancho * alto) / 2272;
+
+            // Aplicar las fórmulas de cálculo según el tipo de mercancía
+            if (tipoMercancia === "documentos") {
+                costo = 40;
+            } else if (tipoMercancia === "paqueteria" || tipoMercancia === "mobiliario" || tipoMercancia === "repuestos" || tipoMercancia === "art_electronicos") {
+                pesoReal = parseFloat(prompt("Ingresa el peso real en kilogramos:"));
+
+                var precioPorKg = 2.5;
+
+                if (!isNaN(pesoReal)) {
+                    costo = (pesoReal * precioPorKg) + distancia; // Sumar la distancia (ubicacion) al costo
+                } else {
+                    costo = (pesoVolumetrico * precioPorKg) + distancia; // Sumar la distancia (ubicacion) al costo
+                }
+            }
+
+            resultado.innerHTML = "Tipo de Mercancía: " + tipoMercancia + "<br>" +
+                "Ubicación: " + ubicacion + "<br>" +
+                "Peso Volumétrico: " + pesoVolumetrico.toFixed(2) + " kg<br>" +
+                "Peso Real: " + pesoReal + " kg<br>" +
+                "Costo Total: Q " + costo.toFixed(2);
+        }
+    </script>
+</body>
+</html>
